@@ -3,19 +3,29 @@ import { Link } from "react-router-dom";
 import { FirebaseContext } from "../../firebase";
 
 const Menu = () => {
+  const [platillos, guardarPlatillos] = useState([]);
+
   const { firebase } = useContext(FirebaseContext);
 
   useEffect(() => {
     const obtenerPlatillos = () => {
-      const resultado = firebase.db
-        .collection("produtos")
-        .onSnapshot(handleSnapshot);
+      firebase.db.collection("produtos").onSnapshot(handleSnapshot);
     };
     obtenerPlatillos();
   }, []);
 
   // Snapshot nos permite utilizar la base de datos en tiempo real de firestore
-  function handleSnapshot(snapshot) {}
+  function handleSnapshot(snapshot) {
+    const platillos = snapshot.docs.map((doc) => {
+      return {
+        id: doc.id,
+        ...doc.data(),
+      };
+    });
+
+    //Armazenar a busca do BD no State
+    guardarPlatillos(platillos);
+  }
 
   return (
     <div>
