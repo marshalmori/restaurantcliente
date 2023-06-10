@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FirebaseContext } from "../../firebase";
+import Platillo from "../ui/Platillo";
 
 const Menu = () => {
   const [platillos, guardarPlatillos] = useState([]);
@@ -9,7 +10,7 @@ const Menu = () => {
 
   useEffect(() => {
     const obtenerPlatillos = () => {
-      firebase.db.collection("produtos").onSnapshot(handleSnapshot);
+      firebase.db.collection("productos").onSnapshot(handleSnapshot);
     };
     obtenerPlatillos();
   }, []);
@@ -28,7 +29,7 @@ const Menu = () => {
   }
 
   return (
-    <div>
+    <>
       <h1 className="text-3xl font-light mb-4">Menu</h1>
       <Link
         to="/nuevo-platillo"
@@ -36,7 +37,11 @@ const Menu = () => {
       >
         Agregar Platillo
       </Link>
-    </div>
+
+      {platillos.map((platillo) => (
+        <Platillo key={platillo.id} platillo={platillo} />
+      ))}
+    </>
   );
 };
 
