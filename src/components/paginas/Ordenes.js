@@ -13,7 +13,7 @@ const Ordenes = () => {
 
   useEffect(() => {
     obtnerOrdenes();
-  }, []);
+  }, [ordenes]);
 
   const obtnerOrdenes = async () => {
     const q = query(
