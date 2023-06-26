@@ -1,12 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import { FirebaseContext } from "../../firebase";
-import {
-  collection,
-  getDocs,
-  query,
-  getFirestore,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
+
+import Orden from "../ui/Orden";
 
 const Ordenes = () => {
   // context con las operaciones de firebase
@@ -25,7 +21,8 @@ const Ordenes = () => {
       where("completado", "==", false)
     );
     const querySnapshot = await getDocs(q);
-    const ordenes = querySnapshot.forEach((doc) => {
+
+    const ordenes = querySnapshot.docs.map((doc) => {
       return {
         id: doc.id,
         ...doc.data(),
@@ -38,6 +35,11 @@ const Ordenes = () => {
   return (
     <div>
       <h1 className="text-3xl font-light mb-4">Ordenes</h1>
+      <div className="sm:flex sm:flex-wrap -mx-3">
+        {ordenes.map((orden) => (
+          <Orden key={orden.id} orden={orden} />
+        ))}
+      </div>
     </div>
   );
 };
