@@ -3,6 +3,7 @@ import { FirebaseContext } from "../../firebase";
 
 const Orden = ({ orden }) => {
   const [tiempoentrega, guardarTiempoentrega] = useState(0);
+
   //Context de firebase
   const { firebase } = useContext(FirebaseContext);
 
@@ -10,6 +11,14 @@ const Orden = ({ orden }) => {
   const definirTiempo = (id) => {
     try {
       firebase.db.collection("ordenes").doc(id).update({ tiempoentrega });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const completarOrden = (id) => {
+    try {
+      firebase.db.collection("ordenes").doc(id).update({ completado: true });
     } catch (error) {
       console.log(error);
     }
@@ -58,6 +67,16 @@ const Orden = ({ orden }) => {
             Tiempo de Entrega:{" "}
             <span className="font-bold">{orden.tiempoentrega} Minutos</span>
           </p>
+        )}
+
+        {!orden.completado && orden.tiempoentrega > 0 && (
+          <button
+            type="button"
+            className="bg-blue-800 hover:bg-blue-700 w-full mt-5 p-2 text-white uppercase font-bold"
+            onClick={() => completarOrden(orden.id)}
+          >
+            Marcar como lista
+          </button>
         )}
       </div>
     </div>
